@@ -1,13 +1,20 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, ChevronDown, Upload, User } from "lucide-react";
+import { useCommentDownload } from "@/hooks/useCommentDownload";
+import {
+  Check,
+  ChevronDown,
+  Download,
+  Upload,
+  User,
+  ChevronUp,
+} from "lucide-react";
 import Image from "next/image";
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from "react";
 
 interface CommentData {
   username: string;
@@ -18,28 +25,53 @@ interface CommentData {
 
 export default function TikTokCommentGenerator() {
   const [commentData, setCommentData] = useState<CommentData>({
-    username: "",
-    comment: "",
+    username: "username",
+    comment: "Write your own TikTok style comment and see what happens 😎",
     verified: true,
   });
   const [usernameCount, setUsernameCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isAvatarDropdownOpen, setIsAvatarDropdownOpen] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Use the custom download hook
+  const { previewRef, downloadSingleImage, downloadMultipleFormats } =
+    useCommentDownload();
+
+  useEffect(() => {
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsAvatarDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setCommentData(prev => ({ ...prev, username: value }));
+    setCommentData((prev) => ({ ...prev, username: value }));
     setUsernameCount(value.length);
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    setCommentData(prev => ({ ...prev, comment: value }));
+    setCommentData((prev) => ({ ...prev, comment: value }));
     setCommentCount(value.length);
   };
 
   const handleVerifiedChange = (checked: boolean) => {
-    setCommentData(prev => ({ ...prev, verified: checked }));
+    setCommentData((prev) => ({ ...prev, verified: checked }));
   };
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,33 +79,92 @@ export default function TikTokCommentGenerator() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        setCommentData(prev => ({ 
-          ...prev, 
-          avatar: event.target?.result as string 
+        setCommentData((prev) => ({
+          ...prev,
+          avatar: event.target?.result as string,
         }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleGenerateRandom = () => {
-    const randomUsernames = ["tiktok_user", "content_creator", "viral_video", "trending_now"];
-    const randomComments = [
-      "This is absolutely amazing! 🔥",
-      "I can't stop watching this 😍",
-      "The talent is unreal! 👏",
-      "This made my day! 😂"
-    ];
-    
-    setCommentData({
-      username: randomUsernames[Math.floor(Math.random() * randomUsernames.length)],
-      comment: randomComments[Math.floor(Math.random() * randomComments.length)],
-      verified: Math.random() > 0.5,
-    });
+  const generateRandomAvatar = async (gender: "male" | "female") => {
+    try {
+      // Using DiceBear API for free avatars
+      const seed = Math.random().toString(36).substring(7);
+      const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&gender=${gender}`;
+
+      // Test if the image loads successfully
+      const img = new window.Image();
+      img.onload = () => {
+        setCommentData((prev) => ({ ...prev, avatar: avatarUrl }));
+      };
+      img.onerror = () => {
+        // Fallback to a different avatar service if DiceBear fails
+        const fallbackUrl = `https://avatars.dicebear.com/api/avataaars/${seed}.svg?gender=${gender}`;
+        setCommentData((prev) => ({ ...prev, avatar: fallbackUrl }));
+      };
+      img.src = avatarUrl;
+    } catch (error) {
+      console.error("Error generating avatar:", error);
+      // Fallback to default user icon
+      setCommentData((prev) => ({ ...prev, avatar: undefined }));
+    }
   };
 
-  const handleDownload = (format: 'png' | 'jpg') => {
-    console.log(`Downloading as ${format}`);
+  const handleGenerateRandom = async (gender: "male" | "female") => {
+    // Generate random avatar first
+    await generateRandomAvatar(gender);
+  };
+
+  const handleDownload = async (format: "png" | "jpg") => {
+    if (isDownloading) {
+      return;
+    }
+    if (!commentData.username && !commentData.comment) {
+      alert("Please enter a username and comment before downloading.");
+      return;
+    }
+
+    setIsDownloading(true);
+    try {
+      const result = await downloadSingleImage(commentData, { format });
+      if (result.success) {
+        console.log(`Successfully downloaded as ${format}: ${result.filename}`);
+      } else {
+        alert(`Failed to download image: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Download error:", error);
+      alert("An error occurred while downloading. Please try again.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleDownloadAll = async () => {
+    if (isDownloading) {
+      return;
+    }
+    if (!commentData.username && !commentData.comment) {
+      alert("Please enter a username and comment before downloading.");
+      return;
+    }
+
+    setIsDownloading(true);
+    try {
+      const result = await downloadMultipleFormats(commentData, ["png", "jpg"]);
+      if (result.success) {
+        console.log(`Successfully downloaded all formats: ${result.filename}`);
+      } else {
+        alert(`Failed to download images: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Download error:", error);
+      alert("An error occurred while downloading. Please try again.");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -89,15 +180,19 @@ export default function TikTokCommentGenerator() {
                   <div className="relative w-12 h-12">
                     <div className="w-full h-full flex items-center justify-center bg-transparent">
                       {commentData.avatar ? (
-                        <Image
-                          src={commentData.avatar}
-                          alt="Avatar"
-                          width={48}
-                          height={48}
-                          className="w-full h-full rounded-full object-cover"
-                        />
+                        <div className="w-full h-full rounded-full border-2 border-gray-200 overflow-hidden">
+                          <Image
+                            src={commentData.avatar}
+                            alt="Avatar"
+                            width={48}
+                            height={48}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        </div>
                       ) : (
-                        <User className="w-full h-full text-gray-400" />
+                        <div className="w-full h-full rounded-full border-2 border-gray-200 flex items-center justify-center bg-gray-50">
+                          <User className="w-full h-full text-gray-400 p-2" />
+                        </div>
                       )}
                     </div>
                   </div>
@@ -118,24 +213,65 @@ export default function TikTokCommentGenerator() {
                       accept="image/*"
                       onChange={handleAvatarUpload}
                     />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleGenerateRandom}
-                      className="h-8 px-3 text-xs"
-                    >
-                      Generate Random
-                      <ChevronDown className="h-4 w-4 ml-2" />
-                    </Button>
+                    <div className="relative" ref={dropdownRef}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setIsAvatarDropdownOpen(!isAvatarDropdownOpen)
+                        }
+                        className="h-8 px-3 text-xs flex items-center"
+                      >
+                        Generate Random
+                        {isAvatarDropdownOpen ? (
+                          <ChevronUp className="h-4 w-4 ml-2" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 ml-2" />
+                        )}
+                      </Button>
+
+                      {/* Gender Selection Dropdown */}
+                      {isAvatarDropdownOpen && (
+                        <div className="absolute top-full left-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                          <div className="p-2">
+                            <div className="space-y-1">
+                              <button
+                                onClick={() => {
+                                  setIsAvatarDropdownOpen(false);
+                                  handleGenerateRandom("male");
+                                }}
+                                className="w-full text-left px-2 py-1 text-xs rounded hover:bg-gray-100 text-gray-700"
+                              >
+                                Male
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setIsAvatarDropdownOpen(false);
+                                  handleGenerateRandom("female");
+                                }}
+                                className="w-full text-left px-2 py-1 text-xs rounded hover:bg-gray-100 text-gray-700"
+                              >
+                                Female
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Username Section */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between mb-2">
-                    <Label htmlFor="username" className="text-sm font-medium">Username</Label>
+                    <Label htmlFor="username" className="text-sm font-medium">
+                      Username
+                    </Label>
                     <div className="flex items-center space-x-2">
-                      <Label htmlFor="verified" className="text-sm text-gray-500">
+                      <Label
+                        htmlFor="verified"
+                        className="text-sm text-gray-500"
+                      >
                         Verified
                       </Label>
                       <Switch
@@ -160,7 +296,9 @@ export default function TikTokCommentGenerator() {
 
                 {/* Comment Section */}
                 <div className="space-y-2">
-                  <Label htmlFor="comment" className="text-sm font-medium">Comment</Label>
+                  <Label htmlFor="comment" className="text-sm font-medium">
+                    Comment
+                  </Label>
                   <Textarea
                     id="comment"
                     maxLength={150}
@@ -177,16 +315,29 @@ export default function TikTokCommentGenerator() {
                 {/* Download Buttons */}
                 <div className="flex flex-col gap-3">
                   <Button
-                    onClick={() => handleDownload('png')}
-                    className="w-full bg-[#0095F6] hover:bg-[#0095F6]/90"
+                    onClick={() => handleDownload("png")}
+                    disabled={isDownloading}
+                    className="w-full bg-[#0095F6] hover:bg-[#0095F6]/90 disabled:opacity-50"
                   >
+                    <Download className="h-4 w-4 mr-2" />
                     Download Comment (.png)
                   </Button>
                   <Button
-                    onClick={() => handleDownload('jpg')}
-                    className="w-full bg-[#0095F6] hover:bg-[#0095F6]/90"
+                    onClick={() => handleDownload("jpg")}
+                    disabled={isDownloading}
+                    className="w-full bg-[#0095F6] hover:bg-[#0095F6]/90 disabled:opacity-50"
                   >
+                    <Download className="h-4 w-4 mr-2" />
                     Download Comment (.jpg)
+                  </Button>
+                  <Button
+                    onClick={handleDownloadAll}
+                    disabled={isDownloading}
+                    variant="outline"
+                    className="w-full border-[#0095F6] text-[#0095F6] hover:bg-[#0095F6] hover:text-white"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download All Formats (.zip)
                   </Button>
                 </div>
               </div>
@@ -205,50 +356,64 @@ export default function TikTokCommentGenerator() {
                     <div className="absolute inset-0 pt-10 pb-12">
                       <div className="relative h-full">
                         <div className="absolute top-16 left-5 right-4 max-w-[270px]">
-                          <div className="comment-container relative w-fit max-w-[280px]">
+                          <div
+                            ref={previewRef}
+                            className="comment-container relative w-fit max-w-[280px]"
+                          >
                             <div className="relative bg-white rounded-tl-[10px] rounded-tr-[10px] rounded-br-[10px] rounded-bl-0 pl-1 pr-2 py-2">
                               <div className="flex items-start gap-0">
                                 <div className="flex-shrink-0 ml-1 mr-1">
-                                  <span className="relative flex aspect-square h-10 w-10 shrink-0 rounded-full h-6 w-6 overflow-hidden bg-transparent">
+                                  <span className="relative flex aspect-square shrink-0 rounded-full h-6 w-6 overflow-hidden bg-transparent">
                                     <span className="h-full w-full rounded-full flex items-center justify-center bg-transparent">
                                       {commentData.avatar ? (
-                                        <Image
-                                          src={commentData.avatar}
-                                          alt="Avatar"
-                                          width={24}
-                                          height={24}
-                                          className="w-full h-full rounded-full object-cover"
-                                        />
+                                        <div className="w-full h-full rounded-full border border-gray-200 overflow-hidden">
+                                          <Image
+                                            src={commentData.avatar}
+                                            alt="Avatar"
+                                            width={24}
+                                            height={24}
+                                            className="w-full h-full rounded-full object-cover"
+                                          />
+                                        </div>
                                       ) : (
-                                        <User className="w-full h-full text-gray-400" />
+                                        <div className="w-full h-full rounded-full border border-gray-200 flex items-center justify-center bg-gray-50">
+                                          <User className="w-full h-full text-gray-400 p-1" />
+                                        </div>
                                       )}
                                     </span>
                                   </span>
                                 </div>
                                 <div className="min-w-0 flex-1 text-[12px] leading-[1.2] whitespace-pre-wrap break-words">
                                   <div className="text-gray-400 font-medium break-words">
-                                    <span className="inline align-baseline">Reply to </span>
+                                    <span className="inline align-baseline">
+                                      Reply to{" "}
+                                    </span>
                                     <span className="inline-flex items-center break-all align-baseline">
                                       {commentData.username || "username"}
+                                      {"'s"}
                                       {commentData.verified && (
                                         <div className="inline-flex items-center justify-center w-[10px] h-[10px] bg-[#20D5EC] rounded-full ml-[2px] translate-y-[1px]">
                                           <Check className="w-[6px] h-[6px] text-white fill-current" />
                                         </div>
                                       )}
                                     </span>
-                                    <span className="inline align-baseline"> comment</span>
+                                    <span className="inline align-baseline">
+                                      {" "}
+                                      comment
+                                    </span>
                                   </div>
                                   <div className="text-gray-900 whitespace-pre-wrap break-words mt-[2px] align-baseline font-bold">
-                                    {commentData.comment || "Write your own TikTok style comment and see what happens 😎"}
+                                    {commentData.comment ||
+                                      "Write your own TikTok style comment and see what happens 😎"}
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <div 
+                            <div
                               className="bubble-triangle absolute left-0 bottom-[-11px] w-0 h-0 border-0 border-solid"
                               style={{
                                 borderTop: "12px solid rgb(255, 255, 255)",
-                                borderRight: "12px solid transparent"
+                                borderRight: "12px solid transparent",
                               }}
                             />
                           </div>
