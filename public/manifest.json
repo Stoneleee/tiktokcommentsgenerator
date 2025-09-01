@@ -1,0 +1,27 @@
+{
+  "name": "TikTok Comments Generator",
+  "short_name": "TikTok Comments",
+  "description": "Generate realistic TikTok comments and create authentic-looking screenshots instantly",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0095F6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "productivity", "utilities"],
+  "lang": "en",
+  "dir": "ltr"
+}

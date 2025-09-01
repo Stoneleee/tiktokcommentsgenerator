@@ -1,6 +1,6 @@
-# TikTok Comment Generator
+# TikTok Comments Generator
 
-A modern React component for generating authentic-looking TikTok comment images. Built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui components.
+A modern React component for generating authentic-looking TikTok comments images. Built with Next.js, TypeScript, Tailwind CSS, and shadcn/ui components.
 
 ## Features
 

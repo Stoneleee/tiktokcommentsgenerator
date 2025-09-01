@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       new URL("https://se-data-us-oss.oss-us-west-1.aliyuncs.com/**"),
-      new URL("https://*.dicebear.com/**"),
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+        pathname: "/**",
+      },
     ],
   },
 };

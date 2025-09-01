@@ -6,15 +6,15 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useCommentDownload } from "@/hooks/useCommentDownload";
 import {
-  Check,
   ChevronDown,
   Download,
   Upload,
-  User,
+  UserRound,
   ChevronUp,
 } from "lucide-react";
 import Image from "next/image";
 import React, { useRef, useState, useEffect } from "react";
+import Check from "./CheckSvg";
 
 interface CommentData {
   username: string;
@@ -79,9 +79,10 @@ export default function TikTokCommentGenerator() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
+        const base64Data = event.target?.result as string;
         setCommentData((prev) => ({
           ...prev,
-          avatar: event.target?.result as string,
+          avatar: base64Data,
         }));
       };
       reader.readAsDataURL(file);
@@ -94,17 +95,64 @@ export default function TikTokCommentGenerator() {
       const seed = Math.random().toString(36).substring(7);
       const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&gender=${gender}`;
 
-      // Test if the image loads successfully
-      const img = new window.Image();
-      img.onload = () => {
-        setCommentData((prev) => ({ ...prev, avatar: avatarUrl }));
+      // Convert image URL to base64
+      const convertImageToBase64 = async (url: string): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const img = new window.Image();
+          img.crossOrigin = "anonymous"; // Enable CORS for cross-origin images
+
+          img.onload = () => {
+            try {
+              // Create canvas to convert image to base64
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+
+              if (!ctx) {
+                reject(new Error("Could not get canvas context"));
+                return;
+              }
+
+              // Set canvas dimensions to match image
+              canvas.width = img.width;
+              canvas.height = img.height;
+
+              // Draw image to canvas
+              ctx.drawImage(img, 0, 0);
+
+              // Convert to base64
+              const base64 = canvas.toDataURL("image/png");
+              resolve(base64);
+            } catch (error) {
+              reject(error);
+            }
+          };
+
+          img.onerror = () => {
+            reject(new Error("Failed to load image"));
+          };
+
+          img.src = url;
+        });
       };
-      img.onerror = () => {
+
+      // Try to convert the primary avatar URL to base64
+      try {
+        const base64Avatar = await convertImageToBase64(avatarUrl);
+        setCommentData((prev) => ({ ...prev, avatar: base64Avatar }));
+      } catch (error) {
+        console.log("Primary avatar failed, trying fallback...");
+
         // Fallback to a different avatar service if DiceBear fails
         const fallbackUrl = `https://avatars.dicebear.com/api/avataaars/${seed}.svg?gender=${gender}`;
-        setCommentData((prev) => ({ ...prev, avatar: fallbackUrl }));
-      };
-      img.src = avatarUrl;
+        try {
+          const fallbackBase64 = await convertImageToBase64(fallbackUrl);
+          setCommentData((prev) => ({ ...prev, avatar: fallbackBase64 }));
+        } catch (fallbackError) {
+          console.error("Both avatar services failed:", fallbackError);
+          // Fallback to default user icon
+          setCommentData((prev) => ({ ...prev, avatar: undefined }));
+        }
+      }
     } catch (error) {
       console.error("Error generating avatar:", error);
       // Fallback to default user icon
@@ -187,11 +235,12 @@ export default function TikTokCommentGenerator() {
                             width={48}
                             height={48}
                             className="w-full h-full rounded-full object-cover"
+                            unoptimized
                           />
                         </div>
                       ) : (
                         <div className="w-full h-full rounded-full border-2 border-gray-200 flex items-center justify-center bg-gray-50">
-                          <User className="w-full h-full text-gray-400 p-2" />
+                          <UserRound className="w-full h-full text-gray-400" />
                         </div>
                       )}
                     </div>
@@ -362,7 +411,7 @@ export default function TikTokCommentGenerator() {
                           >
                             <div className="relative bg-white rounded-tl-[10px] rounded-tr-[10px] rounded-br-[10px] rounded-bl-0 pl-1 pr-2 py-2">
                               <div className="flex items-start gap-0">
-                                <div className="flex-shrink-0 ml-1 mr-1">
+                                <div className="flex flex-shrink-0 ml-1 mr-1">
                                   <span className="relative flex aspect-square shrink-0 rounded-full h-6 w-6 overflow-hidden bg-transparent">
                                     <span className="h-full w-full rounded-full flex items-center justify-center bg-transparent">
                                       {commentData.avatar ? (
@@ -373,11 +422,12 @@ export default function TikTokCommentGenerator() {
                                             width={24}
                                             height={24}
                                             className="w-full h-full rounded-full object-cover"
+                                            unoptimized
                                           />
                                         </div>
                                       ) : (
                                         <div className="w-full h-full rounded-full border border-gray-200 flex items-center justify-center bg-gray-50">
-                                          <User className="w-full h-full text-gray-400 p-1" />
+                                          <UserRound className="w-full h-full text-gray-400" />
                                         </div>
                                       )}
                                     </span>
@@ -389,13 +439,14 @@ export default function TikTokCommentGenerator() {
                                       Reply to{" "}
                                     </span>
                                     <span className="inline-flex items-center break-all align-baseline">
-                                      {commentData.username || "username"}
+                                      {commentData.username}
                                       {"'s"}
-                                      {commentData.verified && (
-                                        <div className="inline-flex items-center justify-center w-[10px] h-[10px] bg-[#20D5EC] rounded-full ml-[2px] translate-y-[1px]">
-                                          <Check className="w-[6px] h-[6px] text-white fill-current" />
-                                        </div>
-                                      )}
+                                      {commentData.verified ? (
+                                        <>
+                                          {" "}
+                                          <Check />
+                                        </>
+                                      ) : null}
                                     </span>
                                     <span className="inline align-baseline">
                                       {" "}

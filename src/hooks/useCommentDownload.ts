@@ -1,8 +1,4 @@
-import {
-  CommentData,
-  DownloadOptions,
-  DownloadResult
-} from "@/types/download";
+import { CommentData, DownloadOptions, DownloadResult } from "@/types/download";
 import html2canvas from "html2canvas-pro";
 import JSZip from "jszip";
 import { useCallback, useRef } from "react";
@@ -39,8 +35,6 @@ export const useCommentDownload = () => {
         // Capture the preview element
         const canvas = await html2canvas(previewRef.current, canvasOptions);
 
-        const format = options.format === "jpg" ? "jpeg" : options.format;
-
         // Convert to blob
         const blob = await new Promise<Blob>((resolve, reject) => {
           canvas.toBlob(
@@ -51,7 +45,7 @@ export const useCommentDownload = () => {
                 reject(new Error("Failed to create blob"));
               }
             },
-            `image/${format}`,
+            `image/${options.format === "jpg" ? "jpeg" : options.format}`,
             options.quality || 0.9
           );
         });
@@ -127,10 +121,6 @@ export const useCommentDownload = () => {
             backgroundColor: null,
             width: 320,
             height: 650,
-            logging: false,
-            ...(format === "jpg" && {
-              backgroundColor: "#ffffff",
-            }),
           };
 
           const canvas = await html2canvas(previewRef.current, canvasOptions);
@@ -144,7 +134,7 @@ export const useCommentDownload = () => {
                   reject(new Error(`Failed to create ${format} blob`));
                 }
               },
-              `image/${format}`,
+              `image/${format === "jpg" ? "jpeg" : format}`,
               0.9
             );
           });

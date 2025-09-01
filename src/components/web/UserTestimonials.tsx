@@ -1,6 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
-import { Star } from 'lucide-react';
+import React from "react";
+import Image from "next/image";
+import { Star } from "lucide-react";
 
 interface Testimonial {
   id: number;
@@ -13,46 +13,58 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Sarah",
-    role: "Social Media Manager",
-    avatar: "https://se-data-us-oss.oss-us-west-1.aliyuncs.com/se/easycomment/FacebookCommentPicker/assets/images/Emma-Richards.webp",
-    content: "Can't believe how much time this TikTok Comment Generator saves me! Used to take forever to reply to everyone, now it's so quick and the responses actually sound natural."
+    name: "Alex Chen",
+    role: "TikTok Content Creator",
+    avatar:
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=alexchen&gender=male",
+    content:
+      "This TikTok Comment Generator is a game-changer! I can create engaging replies in seconds instead of spending hours thinking of responses. The fake comment screenshots look so real that my followers can't tell the difference! 🔥",
   },
   {
     id: 2,
-    name: "Mike",
-    role: "Content Creator",
-    avatar: "https://se-data-us-oss.oss-us-west-1.aliyuncs.com/se/easycomment/FacebookCommentPicker/assets/images/Michael-Turner.webp",
-    content: "The fake screenshots look exactly like real TikTok comments - this is perfect for my content planning! Super easy to use and makes my thumbnails look way better."
+    name: "Maya Rodriguez",
+    role: "Social Media Influencer",
+    avatar:
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=mayarodriguez&gender=female",
+    content:
+      "As someone with 500K+ followers, I need to respond to hundreds of comments daily. This tool saves me so much time while keeping my responses authentic and engaging. The verified badge feature is perfect! 👑",
   },
   {
     id: 3,
-    name: "Emma",
-    role: "Digital Marketing Specialist",
-    avatar: "https://se-data-us-oss.oss-us-west-1.aliyuncs.com/se/easycomment/FacebookCommentPicker/assets/images/Sarah-Lee.webp",
-    content: "After evaluating multiple solutions, I can confidently say this TikTok Comment Generator delivers exceptional results. The AI-generated responses maintain professionalism while staying authentic."
+    name: "Jordan Kim",
+    role: "Marketing Specialist",
+    avatar:
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=jordankim&gender=male",
+    content:
+      "I use this for client content planning and mockups. The comment generator creates realistic TikTok-style responses that help us visualize engagement before posting. It's become essential for our strategy sessions! 💯",
   },
   {
     id: 4,
-    name: "David",
-    role: "TikToker",
-    avatar: "https://se-data-us-oss.oss-us-west-1.aliyuncs.com/se/easycomment/FacebookCommentPicker/assets/images/David-Thompson.webp",
-    content: "Love how real these TikTok screenshots look! Been using them for my mock-ups and no one can tell the difference. Really helpful for planning content and testing ideas."
+    name: "Sophie Williams",
+    role: "TikTok Community Manager",
+    avatar:
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=sophiewilliams&gender=female",
+    content:
+      "Managing multiple TikTok accounts was a nightmare until I found this tool. I can generate appropriate responses for different brand voices and create fake screenshots for training my team. Absolute lifesaver! ✨",
   },
   {
     id: 5,
-    name: "Chan",
-    role: "Community Manager",
-    avatar: "https://se-data-us-oss.oss-us-west-1.aliyuncs.com/se/easycomment/FacebookCommentPicker/assets/images/Jessica-Williams.webp",
-    content: "The TikTok Comment Generator has transformed how we handle client engagement. It's efficient, professional, and helps maintain consistent communication across all accounts."
+    name: "Marcus Johnson",
+    role: "Brand Manager",
+    avatar:
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=marcusjohnson&gender=male",
+    content:
+      "We use this for content planning and client presentations. The ability to create realistic comment scenarios helps us predict engagement and plan our content strategy. The download feature is brilliant! 🚀",
   },
   {
     id: 6,
-    name: "James",
-    role: "Social Media Creator",
-    avatar: "https://se-data-us-oss.oss-us-west-1.aliyuncs.com/se/easycomment/FacebookCommentPicker/assets/images/Alex-Martin.webp",
-    content: "Such a time saver! The comment generator helps me keep up with all my followers without spending hours on replies. Plus the fake comments feature is amazing for previews 💰."
-  }
+    name: "Luna Patel",
+    role: "Growth Strategist",
+    avatar:
+      "https://api.dicebear.com/7.x/avataaars/svg?seed=lunapatel&gender=female",
+    content:
+      "This tool has revolutionized how I help creators grow their TikTok presence. I can quickly generate comment examples and create mockups that show clients what engagement looks like. It's my secret weapon! 💎",
+  },
 ];
 
 const StarRating = () => (
@@ -69,7 +81,7 @@ export default function UserTestimonials() {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="mb-12 text-center">
-            <h2 className="text-4xl font-semibold font-bold mb-4">
+            <h2 className="text-4xl font-bold mb-4">
               What Our Users Are Saying
             </h2>
           </div>
@@ -80,7 +92,9 @@ export default function UserTestimonials() {
                 className="flex flex-col justify-between bg-white rounded-[20px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.1)] p-8"
               >
                 <StarRating />
-                <p className="text-gray-600 mb-6 leading-relaxed">{testimonial.content}</p>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  {testimonial.content}
+                </p>
                 <div className="flex items-center">
                   <Image
                     className="w-10 h-10 rounded-full mr-3"
@@ -88,10 +102,15 @@ export default function UserTestimonials() {
                     alt={testimonial.name}
                     width={40}
                     height={40}
+                    unoptimized
                   />
                   <div>
-                    <div className="font-medium text-sm mb-1">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
+                    <div className="font-medium text-sm mb-1">
+                      {testimonial.name}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {testimonial.role}
+                    </div>
                   </div>
                 </div>
               </div>
