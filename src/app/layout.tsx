@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SEOStructuredData from "@/components/SEOStructuredData";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
-  description: "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats. Perfect for content creators, marketers, and social media managers.",
+  description:
+    "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats. Perfect for content creators, marketers, and social media managers.",
   keywords: [
     "TikTok comment generator",
     "fake TikTok comments",
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
     "social media mockups",
     "TikTok content planning",
     "social media strategy",
-    "TikTok community management"
+    "TikTok community management",
   ],
   authors: [{ name: "TikTok Comments Generator Team" }],
   creator: "TikTok Comments Generator",
@@ -30,33 +32,37 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://tiktokcommentsgenerator.com'),
+  metadataBase: new URL("https://tiktokcommentsgenerator.com"),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   openGraph: {
-    title: "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
-    description: "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats.",
-    url: 'https://tiktokcommentgenerator.com',
-    siteName: 'TikTok Comment Generator',
+    title:
+      "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
+    description:
+      "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats.",
+    url: "https://tiktokcommentgenerator.com",
+    siteName: "TikTok Comment Generator",
     images: [
       {
-        url: '/images/tiktok-comment-generator-og.jpg',
+        url: "/images/tiktok-comment-generator-og.jpg",
         width: 1200,
         height: 630,
-        alt: 'TikTok Comment Generator - Create Fake TikTok Comments and Screenshots',
+        alt: "TikTok Comment Generator - Create Fake TikTok Comments and Screenshots",
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
-    description: "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats.",
-    images: ['/images/tiktok-comment-generator-og.jpg'],
-    creator: '@tiktokcommentgen',
-    site: '@tiktokcommentgen',
+    card: "summary_large_image",
+    title:
+      "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
+    description:
+      "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats.",
+    images: ["/images/tiktok-comment-generator-og.jpg"],
+    creator: "@tiktokcommentgen",
+    site: "@tiktokcommentgen",
   },
   robots: {
     index: true,
@@ -64,29 +70,29 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
-    yahoo: 'your-yahoo-verification-code',
+    google: "your-google-verification-code",
+    yandex: "your-yandex-verification-code",
+    yahoo: "your-yahoo-verification-code",
     other: {
-      'msvalidate.01': 'your-bing-verification-code',
+      "msvalidate.01": "your-bing-verification-code",
     },
   },
-  category: 'Social Media Tools',
-  classification: 'Content Creation Software',
+  category: "Social Media Tools",
+  classification: "Content Creation Software",
   other: {
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'TikTok Comment Generator',
-    'application-name': 'TikTok Comment Generator',
-    'msapplication-TileColor': '#0095F6',
-    'msapplication-config': '/browserconfig.xml',
-    'theme-color': '#0095F6',
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "TikTok Comment Generator",
+    "application-name": "TikTok Comment Generator",
+    "msapplication-TileColor": "#0095F6",
+    "msapplication-config": "/browserconfig.xml",
+    "theme-color": "#0095F6",
   },
 };
 
@@ -101,6 +107,7 @@ export default function RootLayout({
         <SEOStructuredData />
       </head>
       <body>{children}</body>
+      <GoogleAnalytics gaId="G-4TNMW7S04B" />
     </html>
   );
 }

@@ -10,7 +10,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
       {/* Navigation Menu */}
       <NavigationMenu />
-      
+
       <div className="sm:p-10 h-full">
         <TikTokCommentGenerator />
 
@@ -23,7 +23,7 @@ export default function Home() {
         {/* FAQ Section */}
         <FAQSection />
       </div>
-      
+
       {/* Footer */}
       <Footer />
     </div>
