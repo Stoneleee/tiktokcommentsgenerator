@@ -23,19 +23,19 @@ const footerSections: FooterSection[] = [
       { label: "FAQ", href: "#faq" },
     ],
   },
-  {
-    title: "Support",
-    links: [
-      { label: "Help Center", href: "/help", external: true },
-      {
-        label: "Contact Us",
-        href: "mailto:loverinfolee@gmail.com",
-        external: true,
-      },
-      { label: "Privacy Policy", href: "/privacy", external: true },
-      { label: "Terms of Service", href: "/terms", external: true },
-    ],
-  },
+  // {
+  //   title: "Support",
+  //   links: [
+  //     { label: "Help Center", href: "/help", external: true },
+  //     {
+  //       label: "Contact Us",
+  //       href: "mailto:loverinfolee@gmail.com",
+  //       external: true,
+  //     },
+  //     { label: "Privacy Policy", href: "/privacy", external: true },
+  //     { label: "Terms of Service", href: "/terms", external: true },
+  //   ],
+  // },
 ];
 
 const scrollToSection = (href: string) => {
@@ -52,7 +52,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {/* Brand Section */}
             <div className="lg:col-span-1">
               <div className="mb-6">
@@ -127,11 +127,11 @@ export default function Footer() {
 
           {/* Bottom Section */}
           <div className="border-t border-gray-800 mt-12 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-center items-center">
               <div className="text-gray-400 text-sm mb-4 md:mb-0">
                 © 2025 TikTok Comments Generator. All rights reserved.
               </div>
-              <div className="flex space-x-6 text-sm">
+              {/* <div className="flex space-x-6 text-sm">
                 <a
                   href="/privacy"
                   className="text-gray-400 hover:text-[#0095F6] transition-colors duration-200"
@@ -150,7 +150,7 @@ export default function Footer() {
                 >
                   Cookie Policy
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
