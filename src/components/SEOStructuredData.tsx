@@ -3,8 +3,8 @@ export default function SEOStructuredData() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "TikTok Comment Generator",
-    "description": "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats.",
-    "url": "https://tiktokcommentgenerator.com",
+    "description": "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges.",
+    "url": "https://tiktokcommentsgenerator.com",
     "applicationCategory": "SocialNetworkingApplication",
     "operatingSystem": "Web Browser",
     "offers": {
@@ -25,12 +25,12 @@ export default function SEOStructuredData() {
     "author": {
       "@type": "Organization",
       "name": "TikTok Comment Generator Team",
-      "url": "https://tiktokcommentgenerator.com"
+      "url": "https://tiktokcommentsgenerator.com"
     },
     "publisher": {
       "@type": "Organization",
       "name": "TikTok Comment Generator",
-      "url": "https://tiktokcommentgenerator.com"
+      "url": "https://tiktokcommentsgenerator.com"
     },
     "mainEntity": {
       "@type": "FAQPage",

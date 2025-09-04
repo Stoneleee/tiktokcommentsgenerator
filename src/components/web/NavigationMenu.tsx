@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface NavigationItem {
@@ -13,30 +13,30 @@ interface NavigationItem {
 const navigationItems: NavigationItem[] = [
   {
     label: "Generator",
-    href: "#generator"
+    href: "#generator",
   },
   {
     label: "Why Use",
-    href: "#why-use"
+    href: "#why-use",
   },
   {
     label: "Testimonials",
-    href: "#testimonials"
+    href: "#testimonials",
   },
   {
     label: "FAQ",
-    href: "#faq"
-  }
+    href: "#faq",
+  },
 ];
 
 export default function NavigationMenu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>('generator');
+  const [activeSection, setActiveSection] = useState<string>("generator");
 
   // Handle scroll to update active section
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navigationItems.map(item => item.href);
+      const sections = navigationItems.map((item) => item.href);
       const scrollPosition = window.scrollY + 100; // Offset for header
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -52,24 +52,25 @@ export default function NavigationMenu() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
       // Update URL hash
-      window.history.pushState(null, '', href);
-      
+      window.history.pushState(null, "", href);
+
       // Scroll to element with offset for fixed header
       const headerHeight = 80; // Approximate header height
       const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
-      
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerHeight;
+
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
     setIsMobileMenuOpen(false);
@@ -81,9 +82,11 @@ export default function NavigationMenu() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="text-2xl font-bold text-[#0095F6]">
-              TikTok Comment Generator
-            </a>
+            <h1>
+              <a href="/" className="text-2xl font-bold text-[#0095F6]">
+                TikTok Comment Generator
+              </a>
+            </h1>
           </div>
 
           {/* Desktop Navigation */}
@@ -94,14 +97,14 @@ export default function NavigationMenu() {
                 onClick={() => scrollToSection(item.href)}
                 className={`font-medium transition-colors duration-200 ${
                   activeSection === item.href
-                    ? 'text-[#0095F6] border-b-2 border-[#0095F6] pb-1'
-                    : 'text-gray-700 hover:text-[#0095F6]'
+                    ? "text-[#0095F6] border-b-2 border-[#0095F6] pb-1"
+                    : "text-gray-700 hover:text-[#0095F6]"
                 }`}
               >
                 {item.label}
               </button>
             ))}
-            <Button 
+            <Button
               className="bg-[#0095F6] hover:bg-[#0095F6]/90"
               onClick={() => scrollToSection("#generator")}
             >
@@ -134,14 +137,14 @@ export default function NavigationMenu() {
                   onClick={() => scrollToSection(item.href)}
                   className={`block w-full text-left font-medium py-2 transition-colors duration-200 ${
                     activeSection === item.href
-                      ? 'text-[#0095F6] bg-blue-50 border-l-4 border-[#0095F6] pl-3'
-                      : 'text-gray-700 hover:text-[#0095F6]'
+                      ? "text-[#0095F6] bg-blue-50 border-l-4 border-[#0095F6] pl-3"
+                      : "text-gray-700 hover:text-[#0095F6]"
                   }`}
                 >
                   {item.label}
                 </button>
               ))}
-              <Button 
+              <Button
                 className="w-full bg-[#0095F6] hover:bg-[#0095F6]/90"
                 onClick={() => scrollToSection("#generator")}
               >

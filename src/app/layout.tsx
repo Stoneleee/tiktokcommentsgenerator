@@ -6,7 +6,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 export const metadata: Metadata = {
   title: "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
   description:
-    "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats. Perfect for content creators, marketers, and social media managers.",
+    "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges.",
   keywords: [
     "TikTok comment generator",
     "fake TikTok comments",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
       "TikTok Comment Generator - Create Fake TikTok Comments & Screenshots",
     description:
       "Generate realistic TikTok comments and create authentic-looking screenshots instantly. Free TikTok comment generator with verified badges, custom avatars, and multiple download formats.",
-    url: "https://tiktokcommentgenerator.com",
+    url: "https://tiktokcommentsgenerator.com",
     siteName: "TikTok Comment Generator",
     images: [
       {

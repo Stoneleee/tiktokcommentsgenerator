@@ -118,9 +118,9 @@ export default function FAQSection() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-[20px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.1)] p-8">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-semibold font-bold mb-4">
+              <h1 className="text-4xl font-semibold font-bold mb-4">
                 Frequently Asked Questions
-              </h2>
+              </h1>
               <p className="text-gray-500 text-xl">FAQs</p>
             </div>
             <div className="max-w-3xl mx-auto">
