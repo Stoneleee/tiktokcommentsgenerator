@@ -82,10 +82,8 @@ export default function NavigationMenu() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <h1>
-              <a href="/" className="text-2xl font-bold text-[#0095F6]">
-                TikTok Comment Generator
-              </a>
+            <h1 className="text-2xl font-bold text-[#0095F6]">
+              TikTok Comment Generator
             </h1>
           </div>
 

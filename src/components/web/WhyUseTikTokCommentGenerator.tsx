@@ -9,9 +9,9 @@ export default function WhyUseTikTokCommentGenerator() {
             <div className="flex flex-col md:flex-row justify-between gap-8">
               <div className="w-full">
                 <div>
-                  <h1 className="text-4xl font-semibold mb-4">
+                  <h2 className="text-4xl font-semibold mb-4">
                     Why Use TikTok Comment Generator?
-                  </h1>
+                  </h2>
                   <p className="text-lg text-gray-600 leading-relaxed">
                     If you're struggling with creating TikTok comments and screenshots,{' '}
                     <a href="/" className="font-bold text-blue-600 hover:text-blue-800">
